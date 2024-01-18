@@ -1,5 +1,5 @@
 public interface AccountManager {
-    User Ulogin(String password, String email);
-    User UsignUp(String firstname,String lastname, String password,  String email);
-    Supporter Slogin(String password, String email);
+    Member Ulogin(String password, String email);
+    Member UsignUp(String firstname,String lastname, String password,  String email);
+    Member Slogin(String password, String email);
 }

@@ -1,16 +1,9 @@
-public class Supporter {
-    protected String firstname;
-    protected String lastname;
+public class Supporter extends Member {
 
-    protected String password;
-    protected String email;
-
-    public Supporter(String firstname,String lastname, String password , String email) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.password = password;
-        this.email = email;
+    public Supporter(java.lang.String firstname, java.lang.String lastname, java.lang.String password, java.lang.String email) {
+        super(firstname, lastname, password, email);
     }
+
     public String getEmail() {
         return email;
     }
@@ -26,13 +19,9 @@ public class Supporter {
     public String getLastName() {
         return lastname;
     }
-
-    public void displaySupporter() {
+    @Override
+    public void displayInfo() {
         System.out.println("Supporter: " + firstname + " "+ lastname );
     }
 
-    @Override
-    public String toString() {
-        return firstname + ","+ lastname +"," + password + "," + email;
-    }
 }
