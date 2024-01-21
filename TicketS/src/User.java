@@ -1,6 +1,6 @@
 public class User extends Member {
 
-    public User(java.lang.String firstname, java.lang.String lastname, java.lang.String password, java.lang.String email) {
+    public User(String firstname, String lastname,String password, String email) {
         super(firstname, lastname, password, email);
     }
     public String getEmail() {

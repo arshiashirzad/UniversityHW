@@ -22,11 +22,10 @@ public class MembersService implements AccountManager {
         return null;
     }
     @Override
-    public Member UsignUp(String firstname,String lastname, String password, String email) {
+    public void UsignUp(String firstname,String lastname, String password, String email) {
         User newUser = new User(firstname,lastname, password,email);
         members.add(newUser);
         DataFileHandler.saveMemberData(members, DataFile);
-        return newUser;
     }
     @Override
     public Member Slogin(String password , String email){

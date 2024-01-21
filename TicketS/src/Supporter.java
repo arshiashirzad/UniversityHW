@@ -1,9 +1,8 @@
 public class Supporter extends Member {
 
-    public Supporter(java.lang.String firstname, java.lang.String lastname, java.lang.String password, java.lang.String email) {
+    public Supporter(String firstname, String lastname, String password, String email) {
         super(firstname, lastname, password, email);
     }
-
     public String getEmail() {
         return email;
     }

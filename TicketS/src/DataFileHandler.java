@@ -4,7 +4,7 @@ import java.util.List;
 
 public class DataFileHandler {
     public static void saveMemberData(List<Member> members, String filePath) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(filePath,true))) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
             for (Member member : members) {
                 writer.println(member.toString());
             }
