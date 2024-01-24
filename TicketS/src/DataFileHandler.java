@@ -1,7 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-
 public class DataFileHandler {
     public static void saveMemberData(List<Member> members, String filePath) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {

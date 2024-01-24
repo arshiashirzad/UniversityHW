@@ -3,16 +3,14 @@ public class TicketSMain {
     public static void main(String[] args){
 
         Scanner input = new Scanner(System.in);
-        int RoleNo=0;
-        while(RoleNo!=3){
+        while(true) {
             System.out.println("""
-                            +==WELCOME=TO=TICKETS======+
-                            | 1. User                  |
-                            | 2. Admin                 |
-                            | 3. Exit                  |
-                            +==========================+""");
+                    +==WELCOME=TO=TICKETS======+
+                    | 1. User                  |
+                    | 2. Admin                 |
+                    +==========================+""");
             System.out.println("Enter your role:");
-             RoleNo = input.nextInt();
+            int RoleNo = input.nextInt();
             while (RoleNo < 1 || RoleNo > 3) {
                 System.out.println("WRONG!Please enter a valid option: ");
                 RoleNo = input.nextInt();
@@ -20,16 +18,20 @@ public class TicketSMain {
             if (RoleNo == 1) {
                 System.out.println("""
                         +==SignUp=Or=Login=========+
-                        |                          |
                         | 1. SignUp                |
                         | 2. Login                 |
-                        | 3. Exit                  |
                         +==========================+""");
                 int op = input.nextInt();
                 if (op == 1) {
                     URegister();
                 } else if (op == 2) {
-                    Ulogin();
+                    Member loggedInUser = Ulogin();
+                    if (loggedInUser != null) {
+                        System.out.println("LOGGED IN SUCCESSFULLY");
+                        loggedInUser.displayInfo();
+                    } else {
+                        System.out.println("Password or Email is incorrect , try again!");
+                    }
                 }
             }
         }
@@ -55,10 +57,14 @@ public class TicketSMain {
             System.out.println("WRONG email FORMAT!");
             email= input.nextLine();
         }
-        mem.UsignUp(firstname,lastname,password,email);
-        System.out.println("SignUp operation done successfully!");
+        boolean isSignedUp= mem.UsignUp(firstname,lastname,password,email);
+        if (isSignedUp){
+            System.out.println("SignUp operation done successfully!");
+        }else{
+            System.out.println("Almost an account exists with the entered email");
+        }
     }
-    public static void Ulogin(){
+    public static Member Ulogin(){
         MembersService mem =new MembersService("Users.txt");
         Validator valid = new Validator();
         Scanner input = new Scanner(System.in);
@@ -74,10 +80,6 @@ public class TicketSMain {
                 System.out.println("WRONG PASSWORD FORMAT!");
                 password= input.nextLine();
             }
-            Member loggedInUser=  mem.Ulogin(password,email);
-            if(loggedInUser!= null){
-                System.out.println("LOGGED IN SUCCESSFULLY");
-                loggedInUser.displayInfo();
-            }
+            return mem.Ulogin(password,email);
     }
 }
