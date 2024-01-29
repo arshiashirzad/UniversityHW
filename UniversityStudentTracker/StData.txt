@@ -1,0 +1,8 @@
+StudentName      StudentNo.       DegreeLevel       Degree_Average
+Reza  Rahmani    89415011         PhD               17.19
+Akbar Majd       41225011         MSc               17.50
+Reza Naderi      31225012         MSC               19.50
+Arshin Ghaderi   60202111         BSc               14.25
+Sarah Modiri     60202012         BSc               19.25
+Sanaz Bighi      89412989         PhD               18.75
+Fatemeh salehi   40201423         MSc               18.25
