@@ -1,20 +1,13 @@
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
-
 class Ticket {
-    public enum ImportanceLevel {
-        LOW,
-        MEDIUM,
-        HIGH
-    }
     private static int ticketCounter = 1;
     private int ticketId;
     private String user;
     private String title;
     private ImportanceLevel importanceLevel;
     private Map<String, List<Message>> messageHistory;
-    private Map<String, Date> lastSeen;
     private boolean active;
     private String assignedSupporter;
 
@@ -24,25 +17,18 @@ class Ticket {
         this.title = title;
         this.importanceLevel = importanceLevel;
         this.messageHistory = new HashMap<>();
-        this.lastSeen = new HashMap<>();
         this.active = true;
         this.assignedSupporter = "";
         addMessage(user, message);
-        updateLastSeen(user);
     }
 
     public void addMessage(String sender, String message) {
         messageHistory.computeIfAbsent(sender, k -> new ArrayList<>())
                 .add(new Message(sender, message));
-        updateLastSeen(sender);
     }
     public List<Message> getHistoryForSender(String sender) {
         return messageHistory.getOrDefault(sender, Collections.emptyList());
     }
-    public Date getLastSeen(String participant) {
-        return lastSeen.getOrDefault(participant, null);
-    }
-
     public void setStatus(boolean active) {
         this.active = active;
     }
@@ -57,7 +43,6 @@ class Ticket {
     public int getTicketId() {
         return ticketId;
     }
-
     public String getUser() {
         return user;
     }
@@ -70,11 +55,10 @@ class Ticket {
     public ImportanceLevel getImportanceLevel() {
         return importanceLevel;
     }
-    public void updateLastSeen(String participant) {
-        lastSeen.put(participant, new Date());
-    }
     public void saveHistory() {
         try (FileWriter writer = new FileWriter("ticket_" + ticketId + "_history.txt")) {
+            writer.write("Ticket Information:");
+            writer.write(ticketId+ "," + user + "," + title + "," + importanceLevel + "," + active + "," + assignedSupporter);
             for (List<Message> senderHistory : messageHistory.values()) {
                 for (Message message : senderHistory) {
                     writer.write(message.toString() + "\n");
