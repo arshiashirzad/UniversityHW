@@ -1,10 +1,11 @@
 import java.util.List;
+import java.util.Map;
 
 interface ITicketManager {
-    int createTicket(String user, String title, ImportanceLevel importanceLevel, String message);
+    int createTicket(String userEmail, String title, String importanceLevel,String message );
     void replyToTicket(int ticketId, String supporter, String message);
     void setTicketStatus(int ticketId, boolean active);
     void saveTicketHistory(int ticketId);
-    List<Integer> getUserActiveTickets(String user);
-    List<Integer> getUserFinishedTickets(String user);
+    List<Integer> getUserActiveTickets(String userEmail);
+    List<Integer> getUserFinishedTickets(String userEmail);
 }

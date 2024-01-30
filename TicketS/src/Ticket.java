@@ -4,27 +4,26 @@ import java.util.*;
 class Ticket {
     private static int ticketCounter = 1;
     private int ticketId;
-    private String user;
+    private String userEmail;
     private String title;
-    private ImportanceLevel importanceLevel;
+    private String importanceLevel;
     private Map<String, List<Message>> messageHistory;
     private boolean active;
     private String assignedSupporter;
 
-    public Ticket(String user, String title, ImportanceLevel importanceLevel, String message) {
+    public Ticket(String userEmail, String title, String importanceLevel, String message) {
         this.ticketId = ticketCounter++;
-        this.user = user;
+        this.userEmail = userEmail;
         this.title = title;
         this.importanceLevel = importanceLevel;
         this.messageHistory = new HashMap<>();
         this.active = true;
-        this.assignedSupporter = "";
-        addMessage(user, message);
+        this.assignedSupporter ="";
+        addMessage(userEmail, message);
     }
-
-    public void addMessage(String sender, String message) {
-        messageHistory.computeIfAbsent(sender, k -> new ArrayList<>())
-                .add(new Message(sender, message));
+    public void addMessage(String userEmail, String message) {
+        messageHistory.computeIfAbsent(userEmail, k -> new ArrayList<>())
+                .add(new Message(userEmail, message));
     }
     public List<Message> getHistoryForSender(String sender) {
         return messageHistory.getOrDefault(sender, Collections.emptyList());
@@ -43,8 +42,8 @@ class Ticket {
     public int getTicketId() {
         return ticketId;
     }
-    public String getUser() {
-        return user;
+    public String getUserEmail() {
+        return userEmail;
     }
     public boolean isActive() {
         return active;
@@ -52,13 +51,13 @@ class Ticket {
     public String getTitle() {
         return title;
     }
-    public ImportanceLevel getImportanceLevel() {
+    public String getImportanceLevel() {
         return importanceLevel;
     }
     public void saveHistory() {
-        try (FileWriter writer = new FileWriter("ticket_" + ticketId + "_history.txt")) {
+        try (FileWriter writer = new FileWriter("ticket_" + ticketId + "_chat.txt")) {
             writer.write("Ticket Information:");
-            writer.write(ticketId+ "," + user + "," + title + "," + importanceLevel + "," + active + "," + assignedSupporter);
+            writer.write( userEmail + "," + title + "," + importanceLevel + "," + active + "," + assignedSupporter);
             for (List<Message> senderHistory : messageHistory.values()) {
                 for (Message message : senderHistory) {
                     writer.write(message.toString() + "\n");

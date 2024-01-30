@@ -1,15 +1,42 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
-
 class TicketManager implements ITicketManager {
-    private List<Ticket> tickets;
+    private ArrayList<Ticket> tickets;
     private Map<String, Integer> supporterWorkload;
     public TicketManager() {
-        this.tickets = new ArrayList<>();
+        this.tickets = loadTicketsFromDirectory("AuthenricationSource/");
         this.supporterWorkload = new HashMap<>();
     }
+    public ArrayList<Ticket> loadTicketsFromDirectory(String directoryPath) {
+        File directory = new File(directoryPath);
+        File[] files = directory.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                String[] fileNameParts = file.getName().split("_");
+                int ticketId = Integer.parseInt(fileNameParts[1]);
+                try (BufferedReader reader = new BufferedReader(new FileReader(directoryPath+"/"+file.getName()))) {
+                    reader.readLine();
+                    String line=reader.readLine();
+                    String[] TicketData = line.split(",");
+                    while ((line = reader.readLine()) != null){
+                    String[] messageHistory = line.split(":");
+                    }
+                    Ticket ticket = new Ticket(TicketData[0],TicketData[1],TicketData[2],);
+                    tickets.add(ticket);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+        return tickets;
+    }
     @Override
-    public int createTicket(String user, String title, ImportanceLevel importanceLevel, String message) {
-        Ticket ticket = new Ticket(user,title,importanceLevel, message);
+    public int createTicket(String userEmail, String title, String importanceLevel ,String message ) {
+        Ticket ticket = new Ticket(userEmail,title,importanceLevel, message);
         tickets.add(ticket);
         String leastBusySupporter = findLeastBusySupporter();
         ticket.assignToSupporter(leastBusySupporter);
@@ -41,20 +68,20 @@ class TicketManager implements ITicketManager {
         }
     }
     @Override
-    public List<Integer> getUserActiveTickets(String user) {
+    public List<Integer> getUserActiveTickets(String userEmail) {
         List<Integer> activeTicketIds = new ArrayList<>();
         for (Ticket ticket : tickets) {
-            if (ticket.getUser().equals(user) && ticket.isActive()) {
+            if (ticket.getUserEmail().equals(userEmail) && ticket.isActive()) {
                 activeTicketIds.add(ticket.getTicketId());
             }
         }
         return activeTicketIds;
     }
     @Override
-    public List<Integer> getUserFinishedTickets(String user) {
+    public List<Integer> getUserFinishedTickets(String userEmail) {
         List<Integer> finishedTicketIds = new ArrayList<>();
         for (Ticket ticket : tickets) {
-            if (ticket.getUser().equals(user) && !ticket.isActive()) {
+            if (ticket.getUserEmail().equals(userEmail) && !ticket.isActive()) {
                 finishedTicketIds.add(ticket.getTicketId());
             }
         }
@@ -87,5 +114,4 @@ class TicketManager implements ITicketManager {
                 .map(Map.Entry::getKey)
                 .orElse("Supporter1");
     }
-    // Update last seen timestamp for a participant
 }

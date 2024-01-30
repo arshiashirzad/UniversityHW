@@ -22,5 +22,4 @@ public class User extends Member {
     public void displayInfo() {
         System.out.println("User: " + firstname + " "+ lastname );
     }
-
 }
