@@ -1,18 +1,15 @@
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 class Ticket {
-    private static int ticketCounter = 1;
-    private int ticketId;
+    public int ticketId;
     private String userEmail;
     private String title;
     private String importanceLevel;
     private Map<String, List<Message>> messageHistory;
     private boolean active;
     private String assignedSupporter;
-
     public Ticket(String userEmail, String title, String importanceLevel, String message) {
-        this.ticketId = ticketCounter++;
+        this.ticketId =getTicketId()+1 ;
         this.userEmail = userEmail;
         this.title = title;
         this.importanceLevel = importanceLevel;
@@ -20,6 +17,18 @@ class Ticket {
         this.active = true;
         this.assignedSupporter ="";
         addMessage(userEmail, message);
+    }
+    public int lastTicketId(){
+        int lastTicketId=0;
+        try (BufferedReader reader = new BufferedReader(new FileReader("lastTicketId.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lastTicketId = Integer.parseInt(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return lastTicketId;
     }
     public void addMessage(String userEmail, String message) {
         messageHistory.computeIfAbsent(userEmail, k -> new ArrayList<>())
@@ -31,11 +40,9 @@ class Ticket {
     public void setStatus(boolean active) {
         this.active = active;
     }
-
     public void assignToSupporter(String supporter) {
         this.assignedSupporter = supporter;
     }
-
     public String getAssignedSupporter() {
         return assignedSupporter;
     }
@@ -63,6 +70,11 @@ class Ticket {
                     writer.write(message.toString() + "\n");
                 }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try (PrintWriter writer = new PrintWriter(new FileWriter("lastTicketId.txt"))) {
+            writer.println(ticketId);
         } catch (IOException e) {
             e.printStackTrace();
         }

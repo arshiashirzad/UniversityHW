@@ -17,7 +17,7 @@ public class AuthHandler {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] memberData = line.split(",");
-                members.add(new User(memberData[0], memberData[1],memberData[2],memberData[3]));
+                members.add(new Supporter(memberData[0], memberData[1],memberData[2],memberData[3]));
             }
         } catch (IOException e) {
             e.printStackTrace();
