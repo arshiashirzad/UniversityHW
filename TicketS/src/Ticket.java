@@ -9,7 +9,7 @@ class Ticket {
     private boolean active;
     private String assignedSupporter;
     public Ticket(String userEmail, String title, String importanceLevel, String message) {
-        this.ticketId =getTicketId()+1 ;
+        this.ticketId =lastTicketId()+1 ;
         this.userEmail = userEmail;
         this.title = title;
         this.importanceLevel = importanceLevel;
@@ -63,8 +63,8 @@ class Ticket {
     }
     public void saveHistory() {
         try (FileWriter writer = new FileWriter("ticket_" + ticketId + "_chat.txt")) {
-            writer.write("Ticket Information:");
-            writer.write( userEmail + "," + title + "," + importanceLevel + "," + active + "," + assignedSupporter);
+            writer.write("Ticket Information:\n");
+            writer.write( userEmail + "," + title + "," + importanceLevel + "," + active + "," + assignedSupporter+ "\n");
             for (List<Message> senderHistory : messageHistory.values()) {
                 for (Message message : senderHistory) {
                     writer.write(message.toString() + "\n");

@@ -30,7 +30,6 @@ public class AppStart {
                         System.out.println("LOGGED IN SUCCESSFULLY");
                         loggedInUser.displayInfo();
                         TicketService.StartTicket(loggedInUser);
-                        flg=false;
                     } else {
                         System.out.println("Password or Email is incorrect , try again!");
                     }
@@ -42,11 +41,12 @@ public class AppStart {
                     System.out.println("LOGGED IN SUCCESSFULLY");
                     loggedInSupporter.displayInfo();
                     TicketService.StartTicket(loggedInSupporter);
-                    flg=false;
+
                 } else {
                     System.out.println("Password or Email is incorrect , try again!");
                 }
             }
+            flg=false;
         }
     }
     public static void URegister(){

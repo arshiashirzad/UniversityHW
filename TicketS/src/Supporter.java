@@ -6,15 +6,12 @@ public class Supporter extends Member {
     public String getEmail() {
         return email;
     }
-
     public String getPassword() {
         return password;
     }
-
     public String getName() {
         return firstname;
     }
-
     public String getLastName() {
         return lastname;
     }
@@ -22,5 +19,4 @@ public class Supporter extends Member {
     public void displayInfo() {
         System.out.println("Supporter: " + firstname + " "+ lastname );
     }
-
 }

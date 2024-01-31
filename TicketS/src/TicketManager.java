@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 class TicketManager implements ITicketManager {
-    private ArrayList<Ticket> tickets;
+    private ArrayList<Ticket> tickets= new ArrayList<Ticket>();
     private Map<String, Integer> supporterWorkload;
     public TicketManager() {
         this.tickets = loadTicketsFromDirectory();
@@ -16,34 +16,36 @@ class TicketManager implements ITicketManager {
         supporterWorkload.put("supporter3",3);
     }
     public ArrayList<Ticket> loadTicketsFromDirectory() {
-        File directory = new File("Tickets/");
+        File directory = new File("/Users/arshia/IdeaProjects/JavaMiniProjects/TicketS");
         File[] files = directory.listFiles();
         if (files != null) {
             for (File file : files) {
+                if(file.getName().startsWith("ticket")){
                 String[] fileNameParts = file.getName().split("_");
                 int ticketId = Integer.parseInt(fileNameParts[1]);
-                try (BufferedReader reader = new BufferedReader(new FileReader("Tickets/"+file.getName()))) {
+                try (BufferedReader reader = new BufferedReader(new FileReader(file.getName()))) {
                     reader.readLine();
                     String line=reader.readLine();
                     String[] TicketData = line.split(",");
                     line = reader.readLine();
-                    Ticket ticket = new Ticket(TicketData[0],TicketData[1],TicketData[2],line);
+                    String[] firstMessage = line.split(":");
+                    Ticket ticket = new Ticket(TicketData[0],TicketData[1],TicketData[2],firstMessage[1]);
                     while ((line = reader.readLine()) != null){
                     String[] messageHistory = line.split(":");
                     String[] sender = messageHistory[0].split("-");
-                    ticket.addMessage(sender[1],messageHistory[1]);
+                    ticket.addMessage(sender[1].replaceAll(" ", ""),messageHistory[1]);
                     }
                     ticket.ticketId = ticketId;
                     tickets.add(ticket);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                }
             }
         }
         return tickets;
     }
-    // Helper method to get a ticket by its ID
-    private Ticket getTicketById(int ticketId) {
+    public Ticket getTicketById(int ticketId) {
         for (Ticket ticket : tickets) {
             if (ticket.getTicketId() == ticketId) {
                 return ticket;
@@ -85,8 +87,8 @@ class TicketManager implements ITicketManager {
         }
     }
     @Override
-    public List<Integer> getUserActiveTickets(String userEmail) {
-        List<Integer> activeTicketIds = new ArrayList<>();
+    public ArrayList<Integer> getUserActiveTickets(String userEmail) {
+        ArrayList<Integer> activeTicketIds = new ArrayList<>();
         for (Ticket ticket : tickets) {
             if (ticket.getUserEmail().equals(userEmail) && ticket.isActive()) {
                 activeTicketIds.add(ticket.getTicketId());
@@ -95,8 +97,8 @@ class TicketManager implements ITicketManager {
         return activeTicketIds;
     }
     @Override
-    public List<Integer> getUserFinishedTickets(String userEmail) {
-        List<Integer> finishedTicketIds = new ArrayList<>();
+    public ArrayList<Integer> getUserFinishedTickets(String userEmail) {
+        ArrayList<Integer> finishedTicketIds = new ArrayList<>();
         for (Ticket ticket : tickets) {
             if (ticket.getUserEmail().equals(userEmail) && !ticket.isActive()) {
                 finishedTicketIds.add(ticket.getTicketId());
@@ -104,19 +106,15 @@ class TicketManager implements ITicketManager {
         }
         return finishedTicketIds;
     }
-
-    // Increment supporter workload
     private void incrementSupporterWorkload(String supporter) {
         supporterWorkload.put(supporter, supporterWorkload.getOrDefault(supporter,0) + 1);
     }
-    // Decrement supporter workload
     private void decrementSupporterWorkload(String supporter) {
         int currentWorkload = supporterWorkload.getOrDefault(supporter,0);
         if (currentWorkload > 0) {
             supporterWorkload.put(supporter, currentWorkload - 1);
         }
     }
-    // Assign the ticket to the least busy supporter
     private String findLeastBusySupporter() {
         return supporterWorkload.entrySet().stream()
                 .min(Comparator.comparingInt(Map.Entry::getValue))
