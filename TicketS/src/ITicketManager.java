@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -6,6 +7,7 @@ interface ITicketManager {
     void replyToTicket(int ticketId, String supporter, String message);
     void setTicketStatus(int ticketId, boolean active);
     void saveTicketHistory(int ticketId);
-    List<Integer> getUserActiveTickets(String userEmail);
-    List<Integer> getUserFinishedTickets(String userEmail);
+    ArrayList<Integer> getUserActiveTickets(String userEmail);
+    ArrayList<Integer> getUserFinishedTickets(String userEmail);
+    ArrayList<Integer> getSupporterTickets(String supporterName);
 }

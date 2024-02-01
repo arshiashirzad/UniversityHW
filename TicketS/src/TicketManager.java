@@ -11,9 +11,9 @@ class TicketManager implements ITicketManager {
     public TicketManager() {
         this.tickets = loadTicketsFromDirectory();
         this.supporterWorkload = new HashMap<>();
-        supporterWorkload.put("supporter1",5);
-        supporterWorkload.put("supporter2",2);
-        supporterWorkload.put("supporter3",3);
+        supporterWorkload.put("Supporter1",5);
+        supporterWorkload.put("Supporter2",2);
+        supporterWorkload.put("Supporter3",3);
     }
     public ArrayList<Ticket> loadTicketsFromDirectory() {
         File directory = new File("/Users/arshia/IdeaProjects/JavaMiniProjects/TicketS");
@@ -30,6 +30,7 @@ class TicketManager implements ITicketManager {
                     line = reader.readLine();
                     String[] firstMessage = line.split(":");
                     Ticket ticket = new Ticket(TicketData[0],TicketData[1],TicketData[2],firstMessage[1]);
+                    ticket.assignToSupporter(TicketData[4]);
                     while ((line = reader.readLine()) != null){
                     String[] messageHistory = line.split(":");
                     String[] sender = messageHistory[0].split("-");
@@ -121,9 +122,14 @@ class TicketManager implements ITicketManager {
                 .map(Map.Entry::getKey)
                 .orElse("Supporter1");
     }
-    public List<Ticket> getTicketsForSupporter(String supporterName) {
-        return tickets.stream()
-                .filter(ticket -> ticket.getAssignedSupporter().equals(supporterName) && ticket.isActive())
-                .collect(Collectors.toList());
+    @Override
+    public ArrayList<Integer> getSupporterTickets(String supporterName) {
+        ArrayList<Integer> supporterTicketIds = new ArrayList<>();
+        for (Ticket ticket : tickets) {
+            if (ticket.getAssignedSupporter().equals(supporterName) && ticket.isActive()) {
+                supporterTicketIds.add(ticket.getTicketId());
+            }
+        }
+        return supporterTicketIds;
     }
 }
